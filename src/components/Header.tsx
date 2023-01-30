@@ -10,9 +10,9 @@ type HeaderButtonProps = {
 };
 
 const HeaderButton: FunctionalComponent<HeaderButtonProps> = ({ text, to }) => (
-    <div class="header-button">
-        <Link href={to}>{text}</Link>
-    </div>
+    <Link class="header-button" href={to}>
+        {text}
+    </Link>
 );
 
 const ThemeButton: FunctionalComponent = () => {
