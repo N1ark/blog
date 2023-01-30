@@ -9,9 +9,14 @@
     },
     "devDependencies": {
         "@preact/preset-vite": "^2.5.0",
-        "@types/node": "^18.11.18"
+        "@types/marked": "^4.0.8",
+        "@types/node": "^18.11.18",
+        "preact-markup": "^2.1.1"
     },
     "dependencies": {
+        "highlight.js": "^11.7.0",
+        "lucide-preact": "^0.108.0",
+        "preact-markdown": "^2.1.0",
         "preact-router": "^4.1.0"
     }
 }

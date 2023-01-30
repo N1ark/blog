@@ -26,6 +26,7 @@ export const ConfigProvider: FunctionalComponent<ComponentChildren> = ({ childre
         }
         return defaultConfig;
     });
+
     const configUpdater = useCallback(
         (newConfig: Partial<Configuration>) => {
             let fullNewConfig: Configuration;
@@ -34,6 +35,12 @@ export const ConfigProvider: FunctionalComponent<ComponentChildren> = ({ childre
         },
         [setConfig]
     );
+
+    useEffect(() => {
+        const app = document.getElementsByTagName("body")[0] as HTMLBodyElement;
+        app.classList.remove("light", "dark");
+        app.classList.add(config.theme);
+    }, [config.theme]);
 
     return (
         <ConfigContext.Provider value={[config, configUpdater]}>
