@@ -1,5 +1,12 @@
-import { ComponentChildren, createContext, FunctionalComponent } from "preact";
-import { useCallback, useContext, useEffect, useState } from "preact/hooks";
+import {
+    createContext,
+    useContext,
+    useState,
+    useCallback,
+    useEffect,
+    FC,
+    PropsWithChildren,
+} from "react";
 
 export type Configuration = {
     theme: "light" | "dark";
@@ -17,15 +24,18 @@ export const useConfig = () => useContext(ConfigContext);
 
 const localStorageKey = "config";
 
-export const ConfigProvider: FunctionalComponent<ComponentChildren> = ({ children }) => {
-    const [config, setConfig] = useState<Configuration>(() => {
+export const ConfigProvider: FC<PropsWithChildren> = ({ children }) => {
+    const [config, setConfig] = useState<Configuration>(defaultConfig);
+
+    useEffect(() => {
         const savedConfig = localStorage.getItem(localStorageKey);
         if (savedConfig) {
             const config = JSON.parse(savedConfig);
-            return { ...defaultConfig, ...config };
+            setConfig({ ...defaultConfig, ...config });
+        } else {
+            setConfig(defaultConfig);
         }
-        return defaultConfig;
-    });
+    }, []);
 
     const configUpdater = useCallback(
         (newConfig: Partial<Configuration>) => {

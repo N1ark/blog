@@ -1,35 +1,39 @@
-import { Sun, Moon } from "lucide-preact";
+import { Sun, Moon } from "lucide-react";
 import { useConfig } from "@/helpers/ConfigContext";
-import { FunctionalComponent } from "preact";
-import { Link } from "preact-router";
-import "./Header.css";
+import { FC } from "react";
+import Link from "next/link";
 
 type HeaderButtonProps = {
     to: string;
     text: string;
 };
 
-const HeaderButton: FunctionalComponent<HeaderButtonProps> = ({ text, to }) => (
-    <Link class="header-button" href={to}>
+const HeaderButton: FC<HeaderButtonProps> = ({ text, to }) => (
+    <Link className="header-button" href={to}>
         {text}
     </Link>
 );
 
-const ThemeButton: FunctionalComponent = () => {
+const ThemeButton: FC = () => {
     const [{ theme }, setConfig] = useConfig();
     return (
-        <div class="header-button">
-            <button onClick={() => setConfig({ theme: theme === "light" ? "dark" : "light" })}>
+        <div className="header-button">
+            <button
+                onClick={() => {
+                    console.log("toggle theme ", setConfig);
+                    setConfig({ theme: theme === "light" ? "dark" : "light" });
+                }}
+            >
                 {theme === "light" ? <Moon /> : <Sun />}
             </button>
         </div>
     );
 };
 
-const Header: FunctionalComponent = () => (
+const Header: FC = () => (
     <nav id="header">
         <HeaderButton to="/" text="Home" />
-        <div class="w-spacer" />
+        <div className="w-spacer" />
         <ThemeButton />
     </nav>
 );

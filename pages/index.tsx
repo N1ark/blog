@@ -1,8 +1,7 @@
 import { Article, getArticles } from "@/helpers/ArticleHelper";
-import { FunctionalComponent } from "preact";
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, FC } from "react";
 
-const Home: FunctionalComponent = () => {
+const Home: FC = () => {
     const [articles, setArticles] = useState<Article[] | null>(null);
 
     useEffect(() => {
@@ -23,7 +22,7 @@ const Home: FunctionalComponent = () => {
                     >
                         <h2>
                             {article.title}
-                            <span class="h2-sub">{article.date}</span>
+                            <span className="h2-sub">{article.date}</span>
                         </h2>
                         <p>{article.summary}</p>
                     </a>
