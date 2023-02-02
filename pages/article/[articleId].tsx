@@ -1,43 +1,44 @@
 import Markdown from "@/components/Markdown";
-import { Article, getArticle, getArticleContent } from "@/helpers/ArticleHelper";
-import { useRouter } from "next/router";
-import { FC, useState, useEffect } from "react";
-import { redirect } from "react-router-dom";
+import { ArticleContent, getArticle, getArticles } from "@/helpers/ArticleHelper";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { FC } from "react";
 
-const ArticlePage: FC = () => {
-    const router = useRouter();
-    const { articleId } = router.query as { articleId: string };
+type ArticleProps = {
+    article: ArticleContent;
+};
 
-    const [article, setArticle] = useState<Article | null>(null);
-    const [articleContent, setArticleContent] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (articleId === "") return;
-
-        getArticle(articleId)
-            .then(setArticle)
-            .catch(() => redirect("/"));
-        getArticleContent(articleId)
-            .then(setArticleContent)
-            .catch(() => redirect("/"));
-    }, [articleId]);
-
-    console.log(articleId);
-
+const ArticlePage: FC<ArticleProps> = ({ article }) => {
     return (
         <>
-            {articleContent === null || article === null ? (
-                <p>Loading...</p>
-            ) : (
-                <>
-                    <h1>
-                        {article.title} <span className="h1-sub">{article.date}</span>
-                    </h1>
-                    <Markdown markdown={articleContent} />
-                </>
-            )}
+            <h1>
+                {article.title} <span className="h1-sub">{article.date}</span>
+            </h1>
+            <Markdown markdown={article.content} />
         </>
     );
 };
 
+const getStaticProps: GetStaticProps<ArticleProps> = ({ params }) => {
+    const articleId = params?.articleId;
+    if (typeof articleId !== "string") {
+        return { notFound: true };
+    }
+    const article = getArticle(articleId, true);
+    return {
+        props: {
+            article,
+        },
+    };
+};
+
+const getStaticPaths: GetStaticPaths = () => {
+    const articles = getArticles();
+    const ids = articles.map((article) => article.id);
+    return {
+        paths: ids.map((articleId) => ({ params: { articleId } })),
+        fallback: false,
+    };
+};
+
 export default ArticlePage;
+export { getStaticPaths, getStaticProps };

@@ -5,8 +5,6 @@ export default function Document() {
         <Html>
             <Head>
                 <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <title>Blog</title>
 
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -18,8 +16,6 @@ export default function Document() {
                     href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&display=swap"
                     rel="stylesheet"
                 />
-
-                <link rel="stylesheet" href="/hljs-b16-material.min.css" />
             </Head>
             <body>
                 <Main />

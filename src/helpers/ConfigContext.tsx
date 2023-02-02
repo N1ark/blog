@@ -29,12 +29,22 @@ export const ConfigProvider: FC<PropsWithChildren> = ({ children }) => {
 
     useEffect(() => {
         const savedConfig = localStorage.getItem(localStorageKey);
-        if (savedConfig) {
-            const config = JSON.parse(savedConfig);
-            setConfig({ ...defaultConfig, ...config });
-        } else {
-            setConfig(defaultConfig);
+        if (!savedConfig) {
+            return setConfig(defaultConfig);
         }
+
+        let config: Configuration;
+        try {
+            config = JSON.parse(savedConfig);
+        } catch {
+            return setConfig(defaultConfig);
+        }
+
+        if (!config) {
+            return setConfig(defaultConfig);
+        }
+
+        setConfig({ ...defaultConfig, ...config });
     }, []);
 
     const configUpdater = useCallback(

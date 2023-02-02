@@ -1,3 +1,13 @@
+:root {
+    --dark-bg: #111;
+    --dark-color: #d8d8d8;
+    --dark-code-bg: #222;
+
+    --light-bg: #fff;
+    --light-color: #333;
+    --light-code-bg: #f6f6f6;
+}
+
 html {
     font-family: "Inter", sans-serif;
 }
@@ -6,13 +16,14 @@ body {
     font-size: 1em;
     margin: 0;
     padding: 0;
+    line-height: 1.45;
 }
 
 #content {
     display: flex;
     flex-direction: column;
     padding: 0 1em;
-    width: calc(min(620px, 100%) - 2em);
+    width: calc(min(640px, 100%) - 2em);
     margin: 0 auto;
 }
 
@@ -21,6 +32,10 @@ body {
     text-decoration: none;
     opacity: 50%;
     transition: opacity 0.2s ease;
+}
+
+.markup * {
+    max-width: 100%;
 }
 
 .markup a:hover {
@@ -38,8 +53,25 @@ body {
     font-size: 0.5em;
 }
 
-code {
+.code-block {
     border-radius: 0.25em;
+    font-size: 0.8em !important;
+}
+
+code {
+    font-family: "Fira Code", ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+        Liberation Mono, monospace !important;
+}
+
+p code {
+    background-color: var(--light-code-bg) !important;
+    border-radius: 4px;
+    font-size: 0.8em;
+    padding: 0.2em 0.5em;
+}
+
+.dark p code {
+    background-color: var(--dark-code-bg) !important;
 }
 
 .article-block {
@@ -68,13 +100,13 @@ code {
 
 body,
 body.light {
-    background-color: white;
-    color: black;
+    background-color: var(--light-bg);
+    color: var(--light-color);
 }
 
 body.dark {
-    background-color: black;
-    color: white;
+    background-color: var(--dark-bg);
+    color: var(--dark-color);
 }
 
 /* Header */
@@ -86,6 +118,7 @@ body.dark {
     display: flex;
     width: calc(min(620px, 100%));
     padding: 0 calc((100vw - 620px) / 2);
+    z-index: 10;
 }
 
 .header-button {
@@ -110,22 +143,37 @@ body.dark {
     height: 1em;
 }
 
-#header {
-    background-color: #000;
-    color: #fff;
-}
-
-.dark #header {
-    background-color: #fff;
-    color: #000;
-}
-
-.header-button:hover {
-    background-color: #fff;
-    color: #000;
-}
-
+#header,
+.light #header,
 .dark .header-button:hover {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--dark-bg);
+    color: var(--dark-color);
+}
+
+.dark #header,
+.light .header-button:hover {
+    background-color: var(--light-bg);
+    color: var(--light-color);
+}
+
+code {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+.code-block {
+    background-color: var(--light-code-bg) !important;
+}
+
+.dark .code-block {
+    background-color: var(--dark-code-bg) !important;
+}
+
+/* Transition */
+
+body,
+#header,
+.code-block,
+p code {
+    transition: color 0.15s ease, background-color 0.15s ease;
 }

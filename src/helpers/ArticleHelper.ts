@@ -1,3 +1,7 @@
+import { readdirSync, readFileSync } from "fs";
+import parseMD from "parse-md";
+import { join } from "path";
+
 export type Article = {
     id: string;
     date: string;
@@ -5,23 +9,34 @@ export type Article = {
     summary: string;
 };
 
-export async function getArticles(): Promise<Article[]> {
-    const response = await fetch("/article-list.json");
-    const articles = await response.json();
-    return articles as Article[];
+export type ArticleContent = Article & {
+    content: string;
+};
+
+const articleDirectory = join(process.cwd(), "articles");
+
+function getArticle(id: string, full?: false): Article;
+function getArticle(id: string, full: true): ArticleContent;
+
+function getArticle(id: string, full: boolean = false) {
+    const path = join(articleDirectory, `${id}.md`);
+    const rawContent = readFileSync(path, "utf8");
+    const { content, metadata } = parseMD(rawContent);
+    const metadataObj = metadata as Record<string, string | undefined>;
+    const article: Article = {
+        id,
+        date: (metadataObj.date as Date | undefined)?.toLocaleDateString() ?? "?",
+        title: metadataObj.title || "?",
+        summary: metadataObj.summary || "?",
+    };
+    return full ? { ...article, content } : article;
 }
 
-export async function getArticle(id: string): Promise<Article> {
-    const articles = await getArticles();
-    const article = articles.find((article) => article.id === id);
-    if (!article) {
-        throw new Error(`Article with id '${id}' not found`);
-    }
-    return article;
+function getArticles(): Article[] {
+    return readdirSync(articleDirectory)
+        .filter((file) => file.endsWith(".md"))
+        .map((file) => file.replace(/\.md$/, ""))
+        .map((id) => getArticle(id));
 }
 
-export async function getArticleContent(id: string): Promise<string> {
-    const response = await fetch(`/articles/${id}.md`);
-    const article = await response.text();
-    return article;
-}
+export { getArticle, getArticles };
